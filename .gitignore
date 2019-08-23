@@ -1,0 +1,16 @@
+$ cat .gitignore
+
+.idea
+.DS_Store
+/images
+/__pycache__
+/.git
+*.txt
+.gitattributes
+!requirements.txt
+spacespace4x.checkpoint
+*.log
+/spaceinstagram/images
+*.pyc
+.env
+sample.log
