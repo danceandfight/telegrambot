@@ -4,18 +4,20 @@ import os
 import requests
 import telegram
 
-from dotenv import load_dotenv
+from environs import Env
 
-os.environ
 
-TELEGRAM_BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
+env = Env()
+env.read_env()
+
+TELEGRAM_BOT_TOKEN = env('TELEGRAM_BOT_TOKEN')
 bot = telegram.Bot(token=TELEGRAM_BOT_TOKEN)
 
 def main():
-  load_dotenv()
+  #load_dotenv()
   logging.basicConfig(filename='sample.log', level=logging.INFO)
   url = 'https://dvmn.org/api/long_polling/'
-  DVMN_TOKEN = os.getenv('DVMN_TOKEN')
+  DVMN_TOKEN = env('DVMN_TOKEN')
   headers = {'Authorization': DVMN_TOKEN}
   time_stamp = ''
 
