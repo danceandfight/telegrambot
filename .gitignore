@@ -13,4 +13,5 @@ spacespace4x.checkpoint
 /spaceinstagram/images
 *.pyc
 .env
+.venv
 sample.log
