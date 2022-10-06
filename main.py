@@ -14,7 +14,6 @@ TELEGRAM_BOT_TOKEN = env('TELEGRAM_BOT_TOKEN')
 bot = telegram.Bot(token=TELEGRAM_BOT_TOKEN)
 
 def main():
-  #load_dotenv()
   logging.basicConfig(filename='sample.log', level=logging.INFO)
   url = 'https://dvmn.org/api/long_polling/'
   DVMN_TOKEN = env('DVMN_TOKEN')
