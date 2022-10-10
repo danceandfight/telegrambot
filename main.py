@@ -6,12 +6,23 @@ import telegram
 
 from environs import Env
 
-
 env = Env()
 env.read_env()
 
 TELEGRAM_BOT_TOKEN = env('TELEGRAM_BOT_TOKEN')
 bot = telegram.Bot(token=TELEGRAM_BOT_TOKEN)
+
+class ErrorLogsHandler(logging.Handler):
+
+    def __init__(self, tg_bot, chat_id):
+        super().__init__()
+        self.chat_id = chat_id
+        self.tg_bot = tg_bot
+
+    def emit(self, record):
+        log_entry = self.format(record)
+        self.tg_bot.send_message(chat_id=self.chat_id, text=log_entry)
+
 
 def main():
     logging.basicConfig(filename='sample.log', level=logging.INFO)
@@ -19,7 +30,7 @@ def main():
     DVMN_TOKEN = env('DVMN_TOKEN')
     headers = {'Authorization': DVMN_TOKEN}
     time_stamp = ''
-
+    
     while True:
         try:
             payload = {'timestamp': time_stamp}
@@ -28,7 +39,7 @@ def main():
             data = response.json()
             if 'error' in data:
                 raise requests.exceptions.HTTPError(response['error'])
-            logging.info(str(data))
+            logger.info(str(data))
             if data['status'] == 'found':
                 time_stamp = int(data['last_attempt_timestamp'])
                 response_info = data['new_attempts'][0]
@@ -45,13 +56,17 @@ def main():
 
             elif data['status'] == 'timeout':
                 time_stamp = int(data['timestamp_to_request'])
-            logging.info(str(time_stamp))
+            logger.info(str(time_stamp))
+        
+        except Exception as err:
+            logger.error('Бот упал с ошибкой:')
+            logger.error(err)
 
-        except requests.exceptions.ReadTimeout:
-            print('timeout')
-        except requests.exceptions.ConnectionError:
-            print('connection error')
 
 if __name__ == '__main__':
+    logger = logging.getLogger('ErrorLoger')
+    logger.setLevel(logging.WARNING)
+    logger.addHandler(ErrorLogsHandler(bot, '209706595'))
+
     main()
 
