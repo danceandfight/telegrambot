@@ -10,7 +10,9 @@ env = Env()
 env.read_env()
 
 TELEGRAM_BOT_TOKEN = env('TELEGRAM_BOT_TOKEN')
+TELEGRAM_BOT_LOGGER_TOKEN = env('TELEGRAM_BOT_LOGGER_TOKEN')
 bot = telegram.Bot(token=TELEGRAM_BOT_TOKEN)
+bot_logger = telegram.Bot(token=TELEGRAM_BOT_LOGGER_TOKEN)
 
 class ErrorLogsHandler(logging.Handler):
 
@@ -57,16 +59,14 @@ def main():
             elif data['status'] == 'timeout':
                 time_stamp = int(data['timestamp_to_request'])
             logger.info(str(time_stamp))
-        
+
         except Exception as err:
             logger.error('Бот упал с ошибкой:')
             logger.error(err)
 
-
 if __name__ == '__main__':
     logger = logging.getLogger('ErrorLoger')
     logger.setLevel(logging.WARNING)
-    logger.addHandler(ErrorLogsHandler(bot, '209706595'))
-
+    logger.addHandler(ErrorLogsHandler(bot_logger, '209706595'))
     main()
 
