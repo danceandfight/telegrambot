@@ -31,12 +31,13 @@ def main():
 
     TELEGRAM_BOT_TOKEN = env('TELEGRAM_BOT_TOKEN')
     TELEGRAM_BOT_LOGGER_TOKEN = env('TELEGRAM_BOT_LOGGER_TOKEN')
+    CHAT_ID = env('CHAT_ID')
 
     bot = telegram.Bot(token=TELEGRAM_BOT_TOKEN)
     bot_logger = telegram.Bot(token=TELEGRAM_BOT_LOGGER_TOKEN)
     
     logger.setLevel(logging.WARNING)
-    logger.addHandler(ErrorLogsHandler(bot_logger, '209706595'))
+    logger.addHandler(ErrorLogsHandler(bot_logger, CHAT_ID))
 
     logging.basicConfig(filename='sample.log', level=logging.INFO)
     url = 'https://dvmn.org/api/long_polling/'
@@ -62,7 +63,7 @@ def main():
                     result = 'Преподавателю все понравилось, можете приступать к следующему уроку'
                 site = 'dvmn.org' + last_attempt['lesson_url']
                 message = 'У вас проверили работу "{}"\n\n{}\n\nСсылка на работу: {}\n'.format(lesson_title, result, site)
-                bot.send_message(chat_id='209706595', text=message)
+                bot.send_message(chat_id=CHAT_ID, text=message)
                 time_stamp = ''
             elif review_results['status'] == 'timeout':
                 time_stamp = int(review_results['timestamp_to_request'])
