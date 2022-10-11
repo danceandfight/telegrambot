@@ -8,6 +8,11 @@ from environs import Env
 
 logger = logging.getLogger('ErrorLoger')
 
+def aware_user(error):
+    logger.error('Бот упал с ошибкой:')
+    logger.error(error)
+
+
 class ErrorLogsHandler(logging.Handler):
 
     def __init__(self, tg_bot, chat_id):
@@ -61,14 +66,15 @@ def main():
                 message = 'У вас проверили работу "{}"\n\n{}\n\nСсылка на работу: {}\n'.format(lesson_title, result, site)
                 bot.send_message(chat_id='209706595', text=message)
                 time_stamp = ''
-
             elif data['status'] == 'timeout':
                 time_stamp = int(data['timestamp_to_request'])
             logger.info(str(time_stamp))
 
-        except Exception as err:
-            logger.error('Бот упал с ошибкой:')
-            logger.error(err)
+        except requests.exceptions.ReadTimeout as err:
+            aware_user(err)
+        except requests.exceptions.ConnectionError as err:
+            aware_user(err)
+            
 
 if __name__ == '__main__':
     main()
