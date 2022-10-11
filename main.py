@@ -6,13 +6,7 @@ import telegram
 
 from environs import Env
 
-env = Env()
-env.read_env()
-
-TELEGRAM_BOT_TOKEN = env('TELEGRAM_BOT_TOKEN')
-TELEGRAM_BOT_LOGGER_TOKEN = env('TELEGRAM_BOT_LOGGER_TOKEN')
-bot = telegram.Bot(token=TELEGRAM_BOT_TOKEN)
-bot_logger = telegram.Bot(token=TELEGRAM_BOT_LOGGER_TOKEN)
+logger = logging.getLogger('ErrorLoger')
 
 class ErrorLogsHandler(logging.Handler):
 
@@ -27,6 +21,18 @@ class ErrorLogsHandler(logging.Handler):
 
 
 def main():
+    env = Env()
+    env.read_env()
+
+    TELEGRAM_BOT_TOKEN = env('TELEGRAM_BOT_TOKEN')
+    TELEGRAM_BOT_LOGGER_TOKEN = env('TELEGRAM_BOT_LOGGER_TOKEN')
+
+    bot = telegram.Bot(token=TELEGRAM_BOT_TOKEN)
+    bot_logger = telegram.Bot(token=TELEGRAM_BOT_LOGGER_TOKEN)
+    
+    logger.setLevel(logging.WARNING)
+    logger.addHandler(ErrorLogsHandler(bot_logger, '209706595'))
+
     logging.basicConfig(filename='sample.log', level=logging.INFO)
     url = 'https://dvmn.org/api/long_polling/'
     DVMN_TOKEN = env('DVMN_TOKEN')
@@ -65,8 +71,5 @@ def main():
             logger.error(err)
 
 if __name__ == '__main__':
-    logger = logging.getLogger('ErrorLoger')
-    logger.setLevel(logging.WARNING)
-    logger.addHandler(ErrorLogsHandler(bot_logger, '209706595'))
     main()
 
