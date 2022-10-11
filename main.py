@@ -49,25 +49,25 @@ def main():
             payload = {'timestamp': time_stamp}
             response = requests.get(url, params=payload, headers=headers)
             response.raise_for_status()
-            data = response.json()
-            if 'error' in data:
+            review_results = response.json()
+            if 'error' in review_results:
                 raise requests.exceptions.HTTPError(response['error'])
-            logger.info(str(data))
-            if data['status'] == 'found':
-                time_stamp = int(data['last_attempt_timestamp'])
-                response_info = data['new_attempts'][0]
-                lesson_title = response_info['lesson_title']
+            logger.info(str(review_results))
+            if review_results['status'] == 'found':
+                time_stamp = int(review_results['last_attempt_timestamp'])
+                last_attempt = review_results['new_attempts'][0]
+                lesson_title = last_attempt['lesson_title']
 
-                if response_info['is_negative']:
+                if last_attempt['is_negative']:
                     result = 'К сожалению, в работе нашлись ошибки.'
-                elif not response_info['is_negative']:
+                elif not last_attempt['is_negative']:
                     result = 'Преподавателю все понравилось, можете приступать к следующему уроку'
-                site = 'dvmn.org' + response_info['lesson_url']
+                site = 'dvmn.org' + last_attempt['lesson_url']
                 message = 'У вас проверили работу "{}"\n\n{}\n\nСсылка на работу: {}\n'.format(lesson_title, result, site)
                 bot.send_message(chat_id='209706595', text=message)
                 time_stamp = ''
-            elif data['status'] == 'timeout':
-                time_stamp = int(data['timestamp_to_request'])
+            elif review_results['status'] == 'timeout':
+                time_stamp = int(review_results['timestamp_to_request'])
             logger.info(str(time_stamp))
 
         except requests.exceptions.ReadTimeout as err:
