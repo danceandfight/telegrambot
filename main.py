@@ -50,8 +50,6 @@ def main():
             response = requests.get(url, params=payload, headers=headers)
             response.raise_for_status()
             review_results = response.json()
-            if 'error' in review_results:
-                raise requests.exceptions.HTTPError(response['error'])
             logger.info(str(review_results))
             if review_results['status'] == 'found':
                 time_stamp = int(review_results['last_attempt_timestamp'])
