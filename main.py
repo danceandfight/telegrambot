@@ -44,7 +44,7 @@ def main():
     while True:
         try:
             payload = {'timestamp': time_stamp}
-            response = requests.get(url, params=payload, headers=headers, timeout=60)
+            response = requests.get(url, params=payload, headers=headers)
             response.raise_for_status()
             review_results = response.json()
             logger.info(str(review_results))
