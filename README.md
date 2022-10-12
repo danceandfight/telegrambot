@@ -44,6 +44,7 @@ pip install -r requirements.txt
 ```sh
 TELEGRAM_BOT_TOKEN='123456789:SFefseEGhyfJyj4jKUutkuASFhrtjhyJ42g'
 TELEGRAM_BOT_LOGGER_TOKEN='987654321:DSGJHEQIhvhu2g4hfsduf21jif4fi3jinfk'
+TELEGRAM_CHAT_ID=308193329
 DVMN_TOKEN=46f539vfsjngi4359860ewgnirgnri39341vmor1
 ```
 
