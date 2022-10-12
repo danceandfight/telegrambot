@@ -5,6 +5,7 @@ import requests
 import telegram
 
 from environs import Env
+from time import sleep
 
 logger = logging.getLogger('ErrorLoger')
 
@@ -43,7 +44,7 @@ def main():
     while True:
         try:
             payload = {'timestamp': time_stamp}
-            response = requests.get(url, params=payload, headers=headers)
+            response = requests.get(url, params=payload, headers=headers, timeout=60)
             response.raise_for_status()
             review_results = response.json()
             logger.info(str(review_results))
@@ -70,6 +71,7 @@ def main():
         except requests.exceptions.ConnectionError as err:
             logger.error('Бот упал с ошибкой:')
             logger.error(err)
+            sleep(30)
             
 
 if __name__ == '__main__':
