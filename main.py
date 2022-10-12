@@ -24,20 +24,20 @@ def main():
     env = Env()
     env.read_env()
 
-    TELEGRAM_BOT_TOKEN = env('TELEGRAM_BOT_TOKEN')
-    TELEGRAM_BOT_LOGGER_TOKEN = env('TELEGRAM_BOT_LOGGER_TOKEN')
-    CHAT_ID = env('CHAT_ID')
+    telegram_bot_token = env('TELEGRAM_BOT_TOKEN')
+    telegram_bot_logger_token = env('TELEGRAM_BOT_LOGGER_TOKEN')
+    telegram_chat_id = env('TELEGRAM_CHAT_ID')
 
-    bot = telegram.Bot(token=TELEGRAM_BOT_TOKEN)
-    bot_logger = telegram.Bot(token=TELEGRAM_BOT_LOGGER_TOKEN)
+    bot = telegram.Bot(token=telegram_bot_token)
+    bot_logger = telegram.Bot(token=telegram_bot_logger_token)
     
     logger.setLevel(logging.WARNING)
-    logger.addHandler(ErrorLogsHandler(bot_logger, CHAT_ID))
+    logger.addHandler(ErrorLogsHandler(bot_logger, telegram_chat_id))
 
     logging.basicConfig(filename='sample.log', level=logging.INFO)
     url = 'https://dvmn.org/api/long_polling/'
-    DVMN_TOKEN = env('DVMN_TOKEN')
-    headers = {'Authorization': DVMN_TOKEN}
+    dvmn_token = env('DVMN_TOKEN')
+    headers = {'Authorization': dvmn_token}
     time_stamp = ''
     
     while True:
@@ -58,7 +58,7 @@ def main():
                     result = 'Преподавателю все понравилось, можете приступать к следующему уроку'
                 site = 'dvmn.org' + last_attempt['lesson_url']
                 message = 'У вас проверили работу "{}"\n\n{}\n\nСсылка на работу: {}\n'.format(lesson_title, result, site)
-                bot.send_message(chat_id=CHAT_ID, text=message)
+                bot.send_message(chat_id=telegram_chat_id, text=message)
                 time_stamp = ''
             elif review_results['status'] == 'timeout':
                 time_stamp = int(review_results['timestamp_to_request'])
