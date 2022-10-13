@@ -58,7 +58,7 @@ python main.py
 
 Установите Docker любым удобным способом: [https://docs.docker.com/engine/install/](https://docs.docker.com/engine/install/)
 
-Используйте ветку `docker_deploy` в репозитории. Там уже есть необходимый Dockerfile. Не запускайте бота через команду: `python main.py`, вместо это нужно создать image и container в докере.
+В репозитории уже есть необходимый Dockerfile. Не запускайте бота через команду: `python main.py`, вместо это нужно создать image и container в докере.
 
 Для создания image используйте команду:
 
@@ -80,10 +80,10 @@ docker run --publish 8000:5000 <название бота>
 
 ## Как установить бота на heroku с помощью докер-контейнера
 
-Используйте ветку `docker_deploy` в репозитории. Там уже есть необходимый Dockerfile и файл .yml. 
+В репозитории уже есть необходимый Dockerfile и файл .yml. 
 - Залогиньтесь в heroku: `heroku container:login`
 - Переключите `stack` c heroku-22 на container командой: `heroku stack:set container` - измнение будет видно во вкладке `Settings/stack`
-- Во вкладке `Deployment Method` используйте `Manual Deploy/Deploy Branch`, выбрав ветку `docker_deploy` чтобы запушить код вручную. В логах будет видно, что для установки используется Dockerfile.
+- Во вкладке `Deployment Method` используйте `Manual Deploy/Deploy Branch`, чтобы запушить код вручную. В логах будет видно, что для установки используется Dockerfile.
 
 ## Как пользоваться
 
