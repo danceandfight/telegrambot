@@ -54,12 +54,36 @@ DVMN_TOKEN=46f539vfsjngi4359860ewgnirgnri39341vmor1
 python main.py
 ```
 
+# Как установить используя Docker
+
+Установите Docker любым удобным способом: [https://docs.docker.com/engine/install/](https://docs.docker.com/engine/install/)
+
+Используйте ветку `docker_deploy` в репозитории. Там уже есть необходимый Dockerfile. Не запускайте бота через команду: `python main.py`, вместо это нужно создать image и container в докере.
+
+Для создания image используйте команду:
+
+```sh
+docker build -t <название бота> .
+```
+`<название бота>` может быть произвольным, например, `tg-bot`. 
+Для запуска контейнера используйте команду:
+```sh
+docker run --publish 8000:5000 <название бота>
+```
+
 ## Как установить бота на heroku
 
 - После регистрации на [heroku.com](heroku.com), создайте новое приложение:`Create new app `
 - Подключите GitHub во вкладке `Deployment Method` и активируйте  `Automatic Deploys`, тогда при каждом обновлении репозитория на GitHub код будет автоматически обновлятся. С помощью `Manual Deploy/Deploy Branch` можно запушить код вручную.
 - Добавьте переменные окружения из `.env` во вкладке `Settings/Config Vars`
 - Во вкладке Resources будет строка `bot python3 main.py` - нужно активировать запуск бота переключателем
+
+## Как установить бота на heroku с помощью докер-контейнера
+
+Используйте ветку `docker_deploy` в репозитории. Там уже есть необходимый Dockerfile и файл .yml. 
+- Залогиньтесь в heroku: `heroku container:login`
+- Переключите `stack` c heroku-22 на container командой: `heroku stack:set container` - измнение будет видно во вкладке `Settings/stack`
+- Во вкладке `Deployment Method` используйте `Manual Deploy/Deploy Branch`, выбрав ветку `docker_deploy` чтобы запушить код вручную. В логах будет видно, что для установки используется Dockerfile.
 
 ## Как пользоваться
 
